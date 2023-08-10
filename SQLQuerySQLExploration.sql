@@ -15,15 +15,12 @@ FROM PortfolioProject..CovidDeaths
 WHERE location LIKE 'poland'
 ORDER BY 1,2
 
-
-
 --Looking at total cases vs population
 
 SELECT location, date, total_cases, population, (total_cases/population)*100 AS PercentaPopulationInfected
 FROM PortfolioProject..CovidDeaths
 WHERE location LIKE 'poland'
 ORDER BY 1,2
-
 
 --Looking fot countries with highest infection rate compared to population
 
@@ -50,12 +47,10 @@ ORDER BY TotalDeathCount DESC
 
 -- Global numbers
 
-
 SELECT SUM(new_cases) AS TotalCases, SUM(cast(new_deaths as int)) AS TotalDeaths, SUM(cast(new_deaths as int))/SUM(new_cases)*100 AS DeathPercentage
 FROM PortfolioProject..CovidDeaths
 WHERE continent IS NOT NULL
 ORDER BY 1,2
-
 
 
 SELECT *
@@ -75,7 +70,7 @@ JOIN  PortfolioProject..CovidVaccinations vac
 WHERE dea.continent IS NOT NULL
 	ORDER BY 1,2,3
 
-	--Use CTE 
+--Use CTE 
 
 WITH PopvsVac (continent, location, date, population, new_vaccinations, RollingPeopleVaccinated)
 as (
