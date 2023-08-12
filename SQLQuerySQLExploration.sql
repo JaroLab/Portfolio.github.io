@@ -70,10 +70,10 @@ JOIN  PortfolioProject..CovidVaccinations vac
 WHERE dea.continent IS NOT NULL
 	ORDER BY 1,2,3
 
-	--Use CTE 
+--Use CTE 
 
 WITH PopvsVac (continent, location, date, population, new_vaccinations, RollingPeopleVaccinated)
-as (
+AS (
 SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations,
 SUM(CONVERT(int, vac.new_vaccinations)) OVER (PARTITION BY dea.location ORDER BY dea.location, dea.date) AS RollingPeopleVaccinated
 FROM PortfolioProject..CovidDeaths dea
@@ -85,7 +85,7 @@ WHERE dea.continent IS NOT NULL
 SELECT *
 FROM PopvsVac
 
--- Temp table
+--Temp table
 
 DROP TABLE if exists #PercentPopulationVaccinated
 CREATE TABLE #PercentPopulationVaccinated
@@ -112,7 +112,7 @@ FROM #PercentPopulationVaccinated
 
 -- Create View
 
-CREATE VIEW PercentPopulationVaccinated as
+CREATE VIEW PercentPopulationVaccinated AS
 SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations,
 SUM(CONVERT(int, vac.new_vaccinations)) OVER (PARTITION BY dea.location ORDER BY dea.location, dea.date) AS RollingPeopleVaccinated
 FROM PortfolioProject..CovidDeaths dea
