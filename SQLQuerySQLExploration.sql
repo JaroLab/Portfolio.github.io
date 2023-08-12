@@ -15,6 +15,7 @@ FROM PortfolioProject..CovidDeaths
 WHERE location LIKE 'poland'
 ORDER BY 1,2
 
+
 --Looking at total cases vs population
 
 SELECT location, date, total_cases, population, (total_cases/population)*100 AS PercentaPopulationInfected
@@ -52,7 +53,6 @@ FROM PortfolioProject..CovidDeaths
 WHERE continent IS NOT NULL
 ORDER BY 1,2
 
-
 SELECT *
 FROM PortfolioProject..CovidDeaths dea
 JOIN  PortfolioProject..CovidVaccinations vac
@@ -70,7 +70,7 @@ JOIN  PortfolioProject..CovidVaccinations vac
 WHERE dea.continent IS NOT NULL
 	ORDER BY 1,2,3
 
---Use CTE 
+	--Use CTE 
 
 WITH PopvsVac (continent, location, date, population, new_vaccinations, RollingPeopleVaccinated)
 as (
@@ -81,7 +81,6 @@ JOIN  PortfolioProject..CovidVaccinations vac
 	ON dea.location = vac.location
 	AND dea.date = vac.date
 WHERE dea.continent IS NOT NULL
---ORDER BY 1,2,3
 )
 SELECT *
 FROM PopvsVac
@@ -99,7 +98,6 @@ new_waccinations numeric,
 RollingPeopleVaccinated numeric
 )
 
-
 INSERT INTO #PercentPopulationVaccinated
 SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations,
 SUM(CONVERT(int, vac.new_vaccinations)) OVER (PARTITION BY dea.location ORDER BY dea.location, dea.date) AS RollingPeopleVaccinated
@@ -108,7 +106,6 @@ JOIN  PortfolioProject..CovidVaccinations vac
 	ON dea.location = vac.location
 	AND dea.date = vac.date
 WHERE dea.continent IS NOT NULL
---ORDER BY 1,2,3
 
 SELECT *, (RollingPeopleVaccinated/Population)*100
 FROM #PercentPopulationVaccinated
@@ -123,7 +120,6 @@ JOIN  PortfolioProject..CovidVaccinations vac
 	ON dea.location = vac.location
 	AND dea.date = vac.date
 WHERE dea.continent IS NOT NULL
---ORDER BY 1,2,3
 
 SELECT *
 FROM PercentPopulationVaccinated

@@ -1,5 +1,5 @@
 
---standarise date format
+--Standarise date format
 
 SELECT saleDate, CONVERT(date, saleDate)
 FROM dbo.NashvilleHousing
@@ -8,13 +8,11 @@ UPDATE dbo.NashvilleHousing
 SET SaleDate = CONVERT(date, SaleDate)
 
 
-
 ALTER TABLE NashvilleHousing
 ADD SaleDateConverted date
 
 UPDATE NashvilleHousing
 SET SaleDateConverted = CONVERT(date, Saledate)
-
 
 
 SELECT saleDate, CONVERT(date, saleDate)
@@ -28,7 +26,7 @@ SELECT saleDate, CONVERT(date, saleDate)
 SELECT DISTINCT * FROM dbo.NashvilleHousing
 
 
---populate property adress data
+--Populate property adress data
 
 SELECT *
 FROM dbo.NashvilleHousing
@@ -51,11 +49,8 @@ JOIN PortfolioProject.dbo.NashvilleHousing b
 	AND a.UniqueID <> b.UniqueID
 Where a.PropertyAddress IS NULL
 
---breaking out address
 
-SELECT *
-
-FROM PortfolioProject.dbo.NashvilleHousing
+--Breaking out address
 
 SELECT
 SUBSTRING(PropertyAddress, 1, CHARINDEX(',', PropertyAddress)-1) AS Address
@@ -72,7 +67,6 @@ ALTER TABLE NashvilleHousing
 ADD PropertySplitAddress nvarchar(255)
 UPDATE NashvilleHousing
 SET PropertySplitCity = SUBSTRING(PropertyAddress, 1, CHARINDEX(',', PropertyAddress)-1)
-
 
 
 SELECT OwnerAddress
@@ -96,23 +90,19 @@ ADD OwnerSplitCity nvarchar(255)
 UPDATE NashvilleHousing
 SET OwnerSplitCity = PARSENAME(REPLACE(OwnerAddress, ',', '.'), 2)
 
+
 ALTER TABLE NashvilleHousing
 ADD OwnerSplitState nvarchar(255)
 UPDATE NashvilleHousing
 SET OwnerSplitState = PARSENAME(REPLACE(OwnerAddress, ',', '.'), 1)
 
 
-SELECT *
-FROM PortfolioProject.dbo.NashvilleHousing
-
-
---change Y to Yes and N to No in 'sold as vacant'
+--Change Y to Yes and N to No in 'sold as vacant'
 
 SELECT DISTINCT (SoldAsVacant), COUNT(SoldAsVacant)
 FROM PortfolioProject.dbo.NashvilleHousing
 GROUP BY SoldAsVacant
 ORDER BY 2
-
 
 
 SELECT SoldAsVacant,
@@ -128,7 +118,8 @@ SET SoldAsVacant = CASE When SoldAsVacant = 'Y' THEN 'Yes'
 	ELSE SoldAsVacant
 	END
 
-	--remove duplicates
+
+--Remove duplicates
 
 WITH RowNumCTE AS(
 SELECT*,
@@ -144,7 +135,6 @@ SELECT*,
 		
 
 FROM PortfolioProject.dbo.NashvilleHousing
---order by ParcelID
 )
 SELECT*
 FROM RowNumCTE
@@ -152,8 +142,8 @@ WHERE row_num >1
 ORDER BY PropertyAddress
 
 
+--Delete unused columns
 
---delete unused columns
 SELECT *
 FROM PortfolioProject.dbo.NashvilleHousing
 
